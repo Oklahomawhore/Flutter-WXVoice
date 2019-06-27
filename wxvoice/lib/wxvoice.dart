@@ -11,7 +11,4 @@ class Wxvoice {
     return version;
   }
 
-  static register() {
-
-  }
 }

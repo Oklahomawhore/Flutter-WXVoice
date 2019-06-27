@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol WXVoiceResponseDelegate <NSObject>
 
-@optional
+@required
 
 - (void)didReceiveVoiceInputResultArray:(NSArray *)array;
 

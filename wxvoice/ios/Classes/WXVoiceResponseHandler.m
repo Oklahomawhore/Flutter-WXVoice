@@ -8,6 +8,10 @@
 #import "WXVoiceResponseHandler.h"
 #import "WXVoiceRecognizer.h"
 
+@interface WXVoiceResponseHandler () <WXVoiceDelegate>
+
+@end
+
 @implementation WXVoiceResponseHandler
 
 + (instancetype)defaultHandler {
@@ -27,31 +31,25 @@ FlutterMethodChannel *flutterWXVoiceMethodChannle = nil;
 }
 
 - (void)voiceInputResultArray:(NSArray *)array{
-    //一旦此方法被回调，array一定会有一个值，所以else的情况不会发生，但写了会更有安全感的
-    if ([_delegate respondsToSelector:@selector(didReceiveVoiceInputResultArray:)]) {
-        [_delegate didReceiveVoiceInputResultArray:array];
-    }
+    [flutterWXVoiceMethodChannle invokeMethod:@"voiceInputResultArray" arguments:array];
+    
 }
 - (void)voiceInputMakeError:(NSInteger)errorCode{
-    NSLog(@"%ld",(long)errorCode);
-    if ([_delegate respondsToSelector:@selector(didReceiveVoiceInputMakeError:)]) {
-        [_delegate didReceiveVoiceInputMakeError:errorCode];
-    }
+    [flutterWXVoiceMethodChannle invokeMethod:@"voiceInputMakeError" arguments:[NSNumber numberWithInteger:errorCode]];
 }
 - (void)voiceInputVolumn:(float)volumn{
-    if ([_delegate respondsToSelector:@selector(didReceiveVoiceInputVolumn:)]) {
-        [_delegate didReceiveVoiceInputVolumn:volumn];
-    }
+    [flutterWXVoiceMethodChannle invokeMethod:@"voiceInputVolumn" arguments:[NSNumber numberWithFloat:volumn]];
 }
 - (void)voiceInputWaitForResult{
     NSLog(@"-------------call back voiceInputWaitForResult----------------");
     //    [_speechRecognizerView finishRecorder];
 }
-- (void)voiceInputDidCancel{
-    if ([_delegate respondsToSelector:@selector(didReceiveVoiceInputDidCancel)]) {
-        [_delegate didReceiveVoiceInputDidCancel];
-    }
+
+- (void)voiceInputDidCancel {
+    [flutterWXVoiceMethodChannle invokeMethod:@"voiceInputDidCancel" arguments:nil];
 }
+
+
 
 
 @end

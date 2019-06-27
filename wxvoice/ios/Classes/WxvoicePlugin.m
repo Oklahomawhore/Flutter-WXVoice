@@ -1,6 +1,9 @@
 #import "WxvoicePlugin.h"
 #import "WXVoiceRecognizer.h"
 #import "WXVoiceResponseHandler.h"
+@interface WxvoicePlugin () <WXVoiceResponseDelegate>
+
+@end
 
 @implementation WxvoicePlugin
 
@@ -10,6 +13,7 @@
                                      binaryMessenger:[registrar messenger]];
     WxvoicePlugin* instance = [[WxvoicePlugin alloc] init];
     [[WXVoiceResponseHandler defaultHandler] setMethodChannel:channel];
+    [WXVoiceResponseHandler defaultHandler].delegate = (id<WXVoiceResponseDelegate>)self;
     [registrar addMethodCallDelegate:instance channel:channel];
     [registrar addApplicationDelegate:instance];
 }
@@ -58,7 +62,7 @@
     WXVoiceRecognizer *speechRecognizer = [WXVoiceRecognizer sharedWXVoice];
     speechRecognizer.silTime = 10.5f;
     
-    speechRecognizer.delegate = [WXVoiceResponseHandler defaultHandler];
+    speechRecognizer.delegate = (id<WXVoiceDelegate>)[WXVoiceResponseHandler defaultHandler];
     [speechRecognizer setAppID:appId];
     [speechRecognizer setDomain:10];
     
